@@ -3,17 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Cafe Pitchforks</title>
+  <title>Cafe Pitchforks - Black & Red Edition</title>
   <style>
-    /* Base Styles */
+    /* Global Animated Black & Red Background */
     body {
       margin: 0;
       font-family: 'Helvetica Neue', Arial, sans-serif;
-      background-color: #fff;
-      color: #333;
+      color: #e60000;  /* primary red for text accents */
       overflow-x: hidden;
+      position: relative;
+      background: #000; /* fallback */
       transition: background-color 0.5s ease;
     }
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, #000, #e60000, #000);
+      background-size: 300% 300%;
+      z-index: -2;
+      animation: globalGradient 20s ease infinite;
+    }
+    @keyframes globalGradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
     /* Header Styling */
     header {
       display: flex;
@@ -25,10 +44,16 @@
       width: 100%;
       top: 0;
       z-index: 1000;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.8);
     }
     header .logo {
       width: 80px;
       height: auto;
+      animation: logoFade 2s ease;
+    }
+    @keyframes logoFade {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     header nav ul {
       list-style: none;
@@ -40,41 +65,79 @@
       margin-left: 20px;
     }
     header nav ul li a {
-      color: #fff;
+      color: #e60000;
       text-decoration: none;
       font-weight: bold;
+      transition: color 0.3s ease;
     }
-    /* Hero Section */
+    header nav ul li a:hover {
+      color: #fff;
+    }
+    
+    /* Hero Section with Dynamic Overlay */
     .hero {
       text-align: center;
-      padding: 120px 20px 100px; /* extra top padding due to fixed header */
-      background: #e60000; /* default red */
-      color: #fff;
-      transition: background 0.5s ease;
+      padding: 130px 20px 100px; /* enough padding for fixed header */
       position: relative;
+      overflow: hidden;
+      background: #000;
+      color: #fff;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      top:0;
+      left:0;
+      right:0;
+      bottom:0;
+      background: linear-gradient(60deg, rgba(230,0,0,0.7), rgba(0,0,0,0.7));
+      background-size: 200% 200%;
+      z-index: -1;
+      animation: heroBgAnim 15s ease infinite;
+    }
+    @keyframes heroBgAnim {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
     .hero h1 {
       margin: 0;
       font-size: 3rem;
-      letter-spacing: 2px;
+      letter-spacing: 3px;
+      animation: fadeInDown 1s ease both;
     }
     .hero p {
       font-size: 1.2rem;
       margin-top: 10px;
+      animation: fadeInUp 1s ease both;
     }
-    /* Store Status (Countdown) - Constant Scale */
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* Store Status (Countdown) */
     #storeStatus {
       margin-top: 20px;
       font-size: 1.2rem;
       padding: 10px 20px;
       display: inline-block;
-      background: rgba(0, 0, 0, 0.3);
+      background: rgba(0, 0, 0, 0.6);
       border-radius: 5px;
+      animation: pulse 2s infinite;
     }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
     /* Products Section with Glass Background */
     .products-section {
       position: relative;
-      padding: 50px 20px 80px; /* extra bottom padding for spacing */
+      padding: 50px 20px 80px;
       background: transparent;
       min-height: 100vh;
       overflow: visible;
@@ -83,9 +146,10 @@
       text-align: center;
       margin-bottom: 30px;
       color: #e60000;
-      font-size: 2rem;
+      font-size: 2.2rem;
       position: relative;
       z-index: 1;
+      animation: fadeIn 2s ease both;
     }
     .products {
       display: flex;
@@ -95,99 +159,118 @@
       position: relative;
       z-index: 1;
     }
-    /* Glass Animated Background Behind Products */
+    /* Animated Glass Background */
     .glass-bg {
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      background: linear-gradient(45deg, rgba(255,255,255,0.3), rgba(230, 0, 0, 0.3));
+      background: linear-gradient(60deg, rgba(0,0,0,0.3), rgba(230,0,0,0.3));
+      background-size: 300% 300%;
       backdrop-filter: blur(15px);
       z-index: 0;
-      animation: fluidBackground 10s linear infinite;
+      animation: gradientShift 12s ease infinite;
     }
-    @keyframes fluidBackground {
-      0% {
-        background: linear-gradient(45deg, rgba(255,255,255,0.3), rgba(230, 0, 0, 0.3));
-      }
-      50% {
-        background: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(0,0,0,0.3));
-      }
-      100% {
-        background: linear-gradient(45deg, rgba(255,255,255,0.3), rgba(230, 0, 0, 0.3));
-      }
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
+    
     /* Product Cards */
     .product-card {
       position: relative;
       width: 300px;
-      border: 2px solid #000;
+      border: 2px solid rgba(255,255,255,0.2);
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
       overflow: hidden;
       cursor: pointer;
-      transition: transform 0.3s ease;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
       opacity: 0;
       transform: translateY(50px);
+      animation: cardFadeIn 1s ease forwards;
+    }
+    @keyframes cardFadeIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .product-card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.7);
     }
     .product-card img {
       width: 100%;
       display: block;
       transition: transform 0.3s ease;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
     }
     .product-card:hover img {
       transform: scale(1.1);
     }
-    /* Overlay effect on product card */
+    /* Overlay on Product Card with Price */
     .overlay {
       position: absolute;
       bottom: 0;
-      background: rgba(0, 0, 0, 0.85);
-      color: #fff;
+      background: rgba(0,0,0,0.9);
+      color: #e60000;
       width: 100%;
       transform: translateY(100%);
       transition: transform 0.4s ease;
       padding: 20px;
       box-sizing: border-box;
+      border-bottom-left-radius: 12px;
+      border-bottom-right-radius: 12px;
     }
     .product-card:hover .overlay {
       transform: translateY(0);
     }
-    .product-card.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    
     /* Footer */
     footer {
       text-align: center;
       padding: 20px;
       background: #000;
-      color: #fff;
+      color: #e60000;
       font-size: 0.9em;
     }
+    
     /* Modal Styling */
     .modal-overlay {
       position: fixed;
       top: 0;
       left: 0;
-      right:0;
-      bottom:0;
-      background: rgba(0,0,0,0.8);
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.9);
       display: none;
       align-items: center;
       justify-content: center;
       z-index: 2000;
+      animation: fadeInModal 0.5s ease;
+    }
+    @keyframes fadeInModal {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
     .modal-overlay.active {
       display: flex;
     }
     .modal {
-      background: #fff;
+      background: #000;
       border-radius: 8px;
       max-width: 500px;
       padding: 20px;
       width: 90%;
       position: relative;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      box-shadow: 0 5px 15px rgba(230,0,0,0.7);
+      color: #e60000;
+      animation: modalSlideIn 0.5s ease;
+    }
+    @keyframes modalSlideIn {
+      from { transform: translateY(-30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
     .modal h3 {
       margin-top: 0;
@@ -199,7 +282,7 @@
     }
     .modal ul li {
       padding: 8px 0;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid #333;
     }
     .modal .close-btn {
       position: absolute;
@@ -208,11 +291,13 @@
       background: none;
       border: none;
       font-size: 1.5rem;
+      color: #e60000;
       cursor: pointer;
     }
-    /* Styling for when store is open (hero background changes) */
-    body.store-open .hero {
-      background: #28a745; /* green hue for open state */
+    
+    /* When Store is Open */
+    body.store-open .hero::before {
+      background: linear-gradient(60deg, rgba(0,0,0,0.7), rgba(230,0,0,0.7));
     }
   </style>
 </head>
@@ -229,10 +314,10 @@
     </nav>
   </header>
 
-  <!-- Hero Section with Store Status -->
+  <!-- Hero Section with Dynamic Overlay and Store Status -->
   <section class="hero">
     <h1>Welcome to Cafe Pitchforks</h1>
-    <p>Experience the unique blend of taste and style.</p>
+    <p>Experience the bold blend of taste and style.</p>
     <div id="storeStatus">Loading status...</div>
   </section>
 
@@ -262,41 +347,41 @@
   </footer>
 
   <script>
-    /***** Product Data *****/
+    /***** Product Data with Prices *****/
     const products = [
       {
         name: "Chips",
-        // Direct link to a chips image from Unsplash
         image: "https://png.pngtree.com/png-vector/20241109/ourmid/pngtree-tortilla-chips-and-cheese-sauce-png-image_14302335.png",
         description: "Crunchy and delicious chips.",
-        variations: [] // One form
+        price: 2,
+        variations: []
       },
       {
         name: "Hotdog",
-        // Link to a tasty hotdog image
         image: "https://voicesofthevoid.wiki.gg/images/8/82/Item_Hotdog_Ingame_Transparent.png?699360",
         description: "Tasty hotdogs with various styles.",
+        price: 1,
         variations: ["Cheese", "Plain", "Chili Cheese"]
       },
       {
         name: "Cheese Sticks",
-        // Link to a cheesy snack image
         image: "https://www.instacart.com/assets/domains/product-image/file/large_0320f9aa-1cb6-4843-aefc-0101aff38e3e.jpg",
         description: "Melting cheese sticks, a savory delight.",
-        variations: [] // Single form
+        price: 3,
+        variations: []
       },
       {
         name: "Pretzels",
-        // Link to a pretzel image
         image: "https://png.pngtree.com/png-clipart/20241028/original/pngtree-soft-pretzels-with-sesame-seeds-isolated-on-black-background-png-image_16530485.png",
         description: "Soft pretzels available in two forms.",
+        price: 1,
         variations: ["Salted", "Sugar"]
       },
       {
         name: "Drinks",
-        // Link to a variety of drinks image
         image: "https://atlas-content-cdn.pixelsquid.com/stock-images/fresh-soda-can-2J89E66-600.jpg",
         description: "Refreshing drinks to quench your thirst.",
+        price: 1,
         variations: ["Frozen Baja", "Frozen Lemonade", "Frozen Red", "Baja Blast", "Water", "Coca-Cola", "Pepsi", "Extra Refreshing"]
       }
     ];
@@ -312,11 +397,14 @@
         <img src="${product.image}" alt="${product.name}">
         <div class="overlay">
           <h3>${product.name}</h3>
-          <p>${product.variations.length ? product.variations.join(' / ') : 'Single Style'}</p>
+          <p>
+            ${product.variations.length ? product.variations.join(' / ') : 'Single Style'}<br>
+            <span class="price">Price: $${product.price}</span>
+          </p>
         </div>
       `;
       
-      // Open modal on click to show detailed info
+      // Open modal on click for product details
       card.addEventListener('click', () => openModal(product));
       productContainer.appendChild(card);
     });
@@ -345,7 +433,7 @@
 
     function openModal(product) {
       modalTitle.textContent = product.name;
-      modalDescription.textContent = product.description;
+      modalDescription.innerHTML = product.description + `<br><strong>Price: $${product.price}</strong>`;
       modalVariations.innerHTML = '';
       if (product.variations.length) {
         variationsTitle.style.display = 'block';
@@ -365,32 +453,28 @@
     /***** Store Availability and Countdown *****/
     const storeStatusElem = document.getElementById('storeStatus');
     const openHour = 11, openMinute = 40, closeHour = 14, closeMinute = 0; // 11:40 AM - 2:00 PM
-    const availableDays = [2, 3, 4]; // Tuesday (2), Wednesday (3), Thursday (4)
+    const availableDays = [2, 3, 4]; // Tuesday, Wednesday, Thursday
 
-    // Helper: Set a date with a specific hour and minute
     function setTimeForDate(date, hour, minute) {
       const newDate = new Date(date);
       newDate.setHours(hour, minute, 0, 0);
       return newDate;
     }
-
-    // Get next opening date & time
+    
     function getNextOpenDate(now) {
-      let today = now.getDay();
+      const today = now.getDay();
       if (availableDays.includes(today)) {
         const openToday = setTimeForDate(now, openHour, openMinute);
         if (now < openToday) return openToday;
       }
-      // Otherwise, check the next available day
       for (let i = 1; i <= 7; i++) {
         const candidate = new Date(now.getTime() + i * 24 * 60 * 60 * 1000);
         if (availableDays.includes(candidate.getDay()))
           return setTimeForDate(candidate, openHour, openMinute);
       }
-      return null; // fallback
+      return null;
     }
-
-    // Update the store status and countdown timer
+    
     function updateStoreStatus() {
       const now = new Date();
       let statusText = "";
@@ -422,9 +506,10 @@
       const minutes = Math.floor((totalSeconds % 3600) / 60);
       const seconds = totalSeconds % 60;
       
-      const formattedTime = String(hours).padStart(2, '0') + ":" +
-                            String(minutes).padStart(2, '0') + ":" +
-                            String(seconds).padStart(2, '0');
+      const formattedTime = 
+        String(hours).padStart(2, '0') + ":" +
+        String(minutes).padStart(2, '0') + ":" +
+        String(seconds).padStart(2, '0');
       
       storeStatusElem.textContent = statusText + formattedTime;
       
