@@ -3,354 +3,440 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Pitchfork Delights</title>
+  <title>Cafe Pitchforks</title>
   <style>
-    /* Global Styles */
-    * {
-      box-sizing: border-box;
+    /* Base Styles */
+    body {
+      margin: 0;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background-color: #fff;
+      color: #333;
+      overflow-x: hidden;
+      transition: background-color 0.5s ease;
+    }
+    /* Header Styling */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #000;
+      padding: 10px 20px;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+    }
+    header .logo {
+      width: 80px;
+      height: auto;
+    }
+    header nav ul {
+      list-style: none;
       margin: 0;
       padding: 0;
+      display: flex;
     }
-    body {
-      background: #000;
+    header nav ul li {
+      margin-left: 20px;
+    }
+    header nav ul li a {
       color: #fff;
-      font-family: 'Arial', sans-serif;
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
-    a {
       text-decoration: none;
-      color: inherit;
+      font-weight: bold;
     }
-    
-    /* Header & Logo */
-    header {
-      background: #111;
-      padding: 20px;
+    /* Hero Section */
+    .hero {
       text-align: center;
+      padding: 120px 20px 100px; /* extra top padding due to fixed header */
+      background: #e60000; /* default red */
+      color: #fff;
+      transition: background 0.5s ease;
       position: relative;
-      z-index: 10;
     }
-    .logo {
-      position: relative;
-      display: inline-block;
-      margin-bottom: 10px;
-    }
-    /* Inline SVG for pitchforks logo */
-    .logo svg {
-      width: 80px;
-      height: 80px;
-      fill: #c00; /* red */
-      stroke: #fff;
-      stroke-width: 2;
-    }
-    .logo h1 {
-      font-size: 2.5em;
-      margin-top: -10px;
+    .hero h1 {
+      margin: 0;
+      font-size: 3rem;
       letter-spacing: 2px;
     }
-    
-    /* Navigation Button */
-    .nav-btn {
-      background: #c00;
-      border: none;
-      color: #fff;
+    .hero p {
+      font-size: 1.2rem;
+      margin-top: 10px;
+    }
+    /* Store Status (Countdown) - Constant Scale */
+    #storeStatus {
+      margin-top: 20px;
+      font-size: 1.2rem;
       padding: 10px 20px;
-      font-size: 1.1em;
-      cursor: pointer;
+      display: inline-block;
+      background: rgba(0, 0, 0, 0.3);
       border-radius: 5px;
-      transition: background 0.3s ease;
     }
-    .nav-btn:hover {
-      background: #e60000;
-    }
-    
-    /* Main Content & Product Containers */
-    main {
-      padding: 40px 20px;
-      animation: fadeIn 2s ease-in;
-    }
-    .product-section {
-      margin-bottom: 60px;
-      padding: 20px;
-      border: 2px solid #c00;
-      border-radius: 10px;
+    /* Products Section with Glass Background */
+    .products-section {
       position: relative;
-      background: rgba(255, 255, 255, 0.05);
-      overflow: hidden;
+      padding: 50px 20px 80px; /* extra bottom padding for spacing */
+      background: transparent;
+      min-height: 100vh;
+      overflow: visible;
     }
-    .product-section h2 {
-      font-size: 2em;
-      margin-bottom: 20px;
-      text-transform: uppercase;
-      border-bottom: 2px solid #c00;
-      padding-bottom: 5px;
+    .products-section h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #e60000;
+      font-size: 2rem;
+      position: relative;
+      z-index: 1;
     }
-    .product-items {
+    .products {
       display: flex;
       flex-wrap: wrap;
-      gap: 20px;
       justify-content: center;
-    }
-    .product-item {
-      background: #222;
-      border: 1px solid #c00;
-      padding: 15px;
-      border-radius: 8px;
-      width: 150px;
-      text-align: center;
-      cursor: pointer;
-      transition: transform 0.3s ease, background 0.3s ease;
+      gap: 20px;
       position: relative;
+      z-index: 1;
     }
-    .product-item:hover {
-      transform: scale(1.05);
-      background: #333;
+    /* Glass Animated Background Behind Products */
+    .glass-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, rgba(255,255,255,0.3), rgba(230, 0, 0, 0.3));
+      backdrop-filter: blur(15px);
+      z-index: 0;
+      animation: fluidBackground 10s linear infinite;
     }
-    .product-item span {
+    @keyframes fluidBackground {
+      0% {
+        background: linear-gradient(45deg, rgba(255,255,255,0.3), rgba(230, 0, 0, 0.3));
+      }
+      50% {
+        background: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(0,0,0,0.3));
+      }
+      100% {
+        background: linear-gradient(45deg, rgba(255,255,255,0.3), rgba(230, 0, 0, 0.3));
+      }
+    }
+    /* Product Cards */
+    .product-card {
+      position: relative;
+      width: 300px;
+      border: 2px solid #000;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      opacity: 0;
+      transform: translateY(50px);
+    }
+    .product-card img {
+      width: 100%;
       display: block;
-      margin-top: 10px;
-      font-weight: bold;
-      color: #c00;
+      transition: transform 0.3s ease;
     }
-    
-    /* Modal Popup Styles */
-    .modal {
+    .product-card:hover img {
+      transform: scale(1.1);
+    }
+    /* Overlay effect on product card */
+    .overlay {
+      position: absolute;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      color: #fff;
+      width: 100%;
+      transform: translateY(100%);
+      transition: transform 0.4s ease;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .product-card:hover .overlay {
+      transform: translateY(0);
+    }
+    .product-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #000;
+      color: #fff;
+      font-size: 0.9em;
+    }
+    /* Modal Styling */
+    .modal-overlay {
       position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
+      right:0;
+      bottom:0;
       background: rgba(0,0,0,0.8);
-      display: flex;
+      display: none;
       align-items: center;
       justify-content: center;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.4s ease;
-      z-index: 20;
+      z-index: 2000;
     }
-    .modal.active {
-      opacity: 1;
-      visibility: visible;
+    .modal-overlay.active {
+      display: flex;
     }
-    .modal-content {
-      background: #111;
-      border: 2px solid #c00;
-      border-radius: 10px;
-      padding: 30px;
+    .modal {
+      background: #fff;
+      border-radius: 8px;
       max-width: 500px;
+      padding: 20px;
       width: 90%;
       position: relative;
-      text-align: center;
-      animation: popup 0.5s ease-out;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     }
-    .modal-content h3 {
-      margin-bottom: 15px;
+    .modal h3 {
+      margin-top: 0;
+      color: #e60000;
     }
-    .modal-content p {
-      margin-bottom: 20px;
+    .modal ul {
+      list-style: none;
+      padding: 0;
     }
-    .close-modal {
+    .modal ul li {
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .modal .close-btn {
       position: absolute;
       top: 10px;
       right: 15px;
       background: none;
       border: none;
-      font-size: 1.5em;
-      color: #c00;
+      font-size: 1.5rem;
       cursor: pointer;
     }
-    
-    /* Animations */
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    @keyframes popup {
-      from { transform: scale(0.8); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-    
-    /* Responsive */
-    @media (max-width: 768px) {
-      .product-items {
-        flex-direction: column;
-        align-items: center;
-      }
-      .product-item {
-        width: 80%;
-      }
-      header h1 {
-        font-size: 2em;
-      }
-    }
-    
-    /* Decorative pitchforks background - optional subtle pattern */
-    body::before {
-      content: "";
-      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cpath d='M50 0 L45 20 L55 20 Z M45 20 L45 40 L55 40 L55 20 Z' fill='%23c00' opacity='0.1'/%3E%3C/svg%3E");
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      background-size: 100px 100px;
+    /* Styling for when store is open (hero background changes) */
+    body.store-open .hero {
+      background: #28a745; /* green hue for open state */
     }
   </style>
 </head>
 <body>
+
+  <!-- Header -->
   <header>
-    <div class="logo">
-      <!-- A simple pitchfork-inspired SVG logo -->
-      <svg viewBox="0 0 64 64">
-        <polygon points="30,2 26,20 34,20" />
-        <rect x="29" y="20" width="6" height="40"/>
-        <line x1="32" y1="60" x2="20" y2="62" stroke="#c00" stroke-width="3"/>
-        <line x1="32" y1="60" x2="44" y2="62" stroke="#c00" stroke-width="3"/>
-      </svg>
-      <h1>Pitchfork Delights</h1>
-    </div>
-    <button class="nav-btn" id="scrollBtn">What We Sell</button>
+    <!-- Replace with your logo link -->
+    <img src="https://i.imgur.com/leA2QfL.gif" alt="Pitchforks Logo" class="logo">
+    <nav>
+      <ul>
+        <li><a href="#products">Our Menu</a></li>
+      </ul>
+    </nav>
   </header>
-  
-  <main id="products">
-    <!-- Product Section Template -->
-    
-    <!-- Pretzels - 2 variants -->
-    <section class="product-section" id="pretzels">
-      <h2>Pretzels</h2>
-      <div class="product-items">
-        <div class="product-item" data-name="Salted Pretzel" data-price="$3.50" data-desc="A classic salted pretzel, baked to perfection.">
-          Salted Pretzel
-          <span>$3.50</span>
-        </div>
-        <div class="product-item" data-name="Cinnamon Sugar Pretzel" data-price="$4.00" data-desc="Sweet and savory cinnamon sugar delight.">
-          Cinnamon Sugar
-          <span>$4.00</span>
-        </div>
-      </div>
-    </section>
-    
-    <!-- Hotdogs - 3 varieties -->
-    <section class="product-section" id="hotdogs">
-      <h2>Hotdogs</h2>
-      <div class="product-items">
-        <div class="product-item" data-name="Classic Hotdog" data-price="$2.50" data-desc="A traditional hotdog with mustard and ketchup.">
-          Classic
-          <span>$2.50</span>
-        </div>
-        <div class="product-item" data-name="Chili Cheese Hotdog" data-price="$3.75" data-desc="Loaded with chili and melted cheese.">
-          Chili Cheese
-          <span>$3.75</span>
-        </div>
-        <div class="product-item" data-name="Spicy Hotdog" data-price="$3.25" data-desc="For those who like it hot – extra spicy mustard included.">
-          Spicy
-          <span>$3.25</span>
-        </div>
-      </div>
-    </section>
-    
-    <!-- Cheese Sticks -->
-    <section class="product-section" id="cheeseSticks">
-      <h2>Cheese Sticks</h2>
-      <div class="product-items">
-        <div class="product-item" data-name="Cheese Sticks" data-price="$4.50" data-desc="Crispy and gooey cheese sticks served with marinara.">
-          Cheese Sticks
-          <span>$4.50</span>
-        </div>
-      </div>
-    </section>
-    
-    <!-- Slushies - 2 variants -->
-    <section class="product-section" id="slushies">
-      <h2>Slushies</h2>
-      <div class="product-items">
-        <div class="product-item" data-name="Blue Raspberry Slushie" data-price="$2.75" data-desc="Icy blue raspberry slushie that cools you down instantly.">
-          Blue Raspberry
-          <span>$2.75</span>
-        </div>
-        <div class="product-item" data-name="Mango Slushie" data-price="$2.75" data-desc="Refreshingly sweet and tangy mango slushie.">
-          Mango
-          <span>$2.75</span>
-        </div>
-      </div>
-    </section>
-    
-    <!-- Drinks - 8 varieties -->
-    <section class="product-section" id="drinks">
-      <h2>Drinks</h2>
-      <div class="product-items">
-        <!-- For brevity, using a loop-like repetition -->
-        <div class="product-item" data-name="Coke" data-price="$1.50" data-desc="Chilled Coke.">Coke <span>$1.50</span></div>
-        <div class="product-item" data-name="Diet Coke" data-price="$1.50" data-desc="Zero-sugar Diet Coke.">Diet Coke <span>$1.50</span></div>
-        <div class="product-item" data-name="Sprite" data-price="$1.50" data-desc="Fresh Sprite with ice.">Sprite <span>$1.50</span></div>
-        <div class="product-item" data-name="Fanta" data-price="$1.50" data-desc="Bold and fruity Fanta.">Fanta <span>$1.50</span></div>
-        <div class="product-item" data-name="Root Beer" data-price="$1.75" data-desc="Classic root beer.">Root Beer <span>$1.75</span></div>
-        <div class="product-item" data-name="Lemonade" data-price="$1.75" data-desc="Refreshing lemonade.">Lemonade <span>$1.75</span></div>
-        <div class="product-item" data-name="Iced Tea" data-price="$1.75" data-desc="Cool iced tea.">Iced Tea <span>$1.75</span></div>
-        <div class="product-item" data-name="Water" data-price="$1.00" data-desc="Bottled water.">Water <span>$1.00</span></div>
-      </div>
-    </section>
-    
-    <!-- Nachos -->
-    <section class="product-section" id="nachos">
-      <h2>Nachos</h2>
-      <div class="product-items">
-        <div class="product-item" data-name="Loaded Nachos" data-price="$5.50" data-desc="Crispy nachos loaded with cheese, jalapenos, and fresh salsa.">
-          Loaded Nachos
-          <span>$5.50</span>
-        </div>
-      </div>
-    </section>
-  </main>
-  
-  <!-- Modal Container for Product Details -->
-  <div class="modal" id="productModal">
-    <div class="modal-content">
-      <button class="close-modal" id="closeModal">&times;</button>
-      <h3 id="modalTitle">Product Name</h3>
-      <p id="modalDesc">Product description goes here.</p>
-      <p id="modalPrice" style="font-size:1.2em; font-weight:bold;">Price</p>
+
+  <!-- Hero Section with Store Status -->
+  <section class="hero">
+    <h1>Welcome to Cafe Pitchforks</h1>
+    <p>Experience the unique blend of taste and style.</p>
+    <div id="storeStatus">Loading status...</div>
+  </section>
+
+  <!-- Products Section with Animated Glass Background -->
+  <section id="products" class="products-section">
+    <div class="glass-bg"></div>
+    <h2>Our Menu - Everything $1</h2>
+    <div class="products" id="productContainer">
+      <!-- Dynamic product cards will be inserted here -->
+    </div>
+  </section>
+
+  <!-- Modal for In-depth Product Details -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <button class="close-btn" id="modalClose">&times;</button>
+      <h3 id="modalTitle">Product Details</h3>
+      <p id="modalDescription"></p>
+      <h4 id="variationsTitle" style="display:none;">Available Options:</h4>
+      <ul id="modalVariations"></ul>
     </div>
   </div>
-  
-  <!-- JavaScript for Interactivity and Animations -->
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Cafe Pitchforks. All rights reserved.</p>
+  </footer>
+
   <script>
-    // Smooth scroll for "What We Sell" button
-    document.getElementById('scrollBtn').addEventListener('click', function() {
-      document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
-    });
-
-    // Modal functionality
-    const modal = document.getElementById('productModal');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalDesc = document.getElementById('modalDesc');
-    const modalPrice = document.getElementById('modalPrice');
-    const closeModal = document.getElementById('closeModal');
-
-    // Delegate event for all product items
-    document.querySelectorAll('.product-item').forEach(item => {
-      item.addEventListener('click', function() {
-        // Fill modal with data attributes from clicked item
-        modalTitle.textContent = this.getAttribute('data-name');
-        modalPrice.textContent = this.getAttribute('data-price');
-        modalDesc.textContent = this.getAttribute('data-desc');
-        // Show modal
-        modal.classList.add('active');
-      });
-    });
-
-    // Close modal when clicking on close button or outside content
-    closeModal.addEventListener('click', () => {
-      modal.classList.remove('active');
-    });
-    window.addEventListener('click', (e) => {
-      if(e.target === modal) {
-        modal.classList.remove('active');
+    /***** Product Data *****/
+    const products = [
+      {
+        name: "Chips",
+        // Direct link to a chips image from Unsplash
+        image: "https://images.unsplash.com/photo-1590080872015-1bde72c24e2d?auto=format&fit=crop&w=800&q=80",
+        description: "Crunchy and delicious chips.",
+        variations: [] // One form
+      },
+      {
+        name: "Hotdog",
+        // Link to a tasty hotdog image
+        image: "https://voicesofthevoid.wiki.gg/images/8/82/Item_Hotdog_Ingame_Transparent.png?699360",
+        description: "Tasty hotdogs with various styles.",
+        variations: ["Cheese", "Plain", "Chili Cheese"]
+      },
+      {
+        name: "Cheese Sticks",
+        // Link to a cheesy snack image
+        image: "https://images.unsplash.com/photo-1562967916-eb82221dfb42?auto=format&fit=crop&w=800&q=80",
+        description: "Melting cheese sticks, a savory delight.",
+        variations: [] // Single form
+      },
+      {
+        name: "Pretzels",
+        // Link to a pretzel image
+        image: "https://images.unsplash.com/photo-1617203251313-cbc20d9cc944?auto=format&fit=crop&w=800&q=80",
+        description: "Soft pretzels available in two forms.",
+        variations: ["Salted", "Sugar"]
+      },
+      {
+        name: "Drinks",
+        // Link to a variety of drinks image
+        image: "https://images.unsplash.com/photo-1510627498534-cf7e9002facc?auto=format&fit=crop&w=800&q=80",
+        description: "Refreshing drinks to quench your thirst.",
+        variations: ["Frozen Baja", "Frozen Lemonade", "Frozen Red", "Baja Blast", "Water", "Coca-Cola", "Pepsi", "Extra Refreshing"]
       }
+    ];
+    
+    /***** Populate Product Cards Dynamically *****/
+    const productContainer = document.getElementById('productContainer');
+    products.forEach((product, index) => {
+      const card = document.createElement('div');
+      card.classList.add('product-card');
+      card.setAttribute('data-index', index);
+      
+      card.innerHTML = `
+        <img src="${product.image}" alt="${product.name}">
+        <div class="overlay">
+          <h3>${product.name}</h3>
+          <p>${product.variations.length ? product.variations.join(' / ') : 'Single Style'}</p>
+        </div>
+      `;
+      
+      // Open modal on click to show detailed info
+      card.addEventListener('click', () => openModal(product));
+      productContainer.appendChild(card);
     });
+    
+    /***** Scroll Reveal Animation for Product Cards *****/
+    const productCards = document.querySelectorAll('.product-card');
+    const observerOptions = { root: null, rootMargin: '0px', threshold: 0.2 };
+    const revealOnScroll = (entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    };
+    const observer = new IntersectionObserver(revealOnScroll, observerOptions);
+    productCards.forEach(card => observer.observe(card));
+    
+    /***** Modal Functionality *****/
+    const modalOverlay = document.getElementById('modalOverlay');
+    const modalClose = document.getElementById('modalClose');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDescription = document.getElementById('modalDescription');
+    const modalVariations = document.getElementById('modalVariations');
+    const variationsTitle = document.getElementById('variationsTitle');
+
+    function openModal(product) {
+      modalTitle.textContent = product.name;
+      modalDescription.textContent = product.description;
+      modalVariations.innerHTML = '';
+      if (product.variations.length) {
+        variationsTitle.style.display = 'block';
+        product.variations.forEach(variation => {
+          const li = document.createElement('li');
+          li.textContent = variation;
+          modalVariations.appendChild(li);
+        });
+      } else {
+        variationsTitle.style.display = 'none';
+      }
+      modalOverlay.classList.add('active');
+    }
+    modalClose.addEventListener('click', () => modalOverlay.classList.remove('active'));
+    modalOverlay.addEventListener('click', (e) => { if(e.target === modalOverlay) modalOverlay.classList.remove('active'); });
+    
+    /***** Store Availability and Countdown *****/
+    const storeStatusElem = document.getElementById('storeStatus');
+    const openHour = 11, openMinute = 40, closeHour = 14, closeMinute = 0; // 11:40 AM - 2:00 PM
+    const availableDays = [2, 3, 4]; // Tuesday (2), Wednesday (3), Thursday (4)
+
+    // Helper: Set a date with a specific hour and minute
+    function setTimeForDate(date, hour, minute) {
+      const newDate = new Date(date);
+      newDate.setHours(hour, minute, 0, 0);
+      return newDate;
+    }
+
+    // Get next opening date & time
+    function getNextOpenDate(now) {
+      let today = now.getDay();
+      if (availableDays.includes(today)) {
+        const openToday = setTimeForDate(now, openHour, openMinute);
+        if (now < openToday) return openToday;
+      }
+      // Otherwise, check the next available day
+      for (let i = 1; i <= 7; i++) {
+        const candidate = new Date(now.getTime() + i * 24 * 60 * 60 * 1000);
+        if (availableDays.includes(candidate.getDay()))
+          return setTimeForDate(candidate, openHour, openMinute);
+      }
+      return null; // fallback
+    }
+
+    // Update the store status and countdown timer
+    function updateStoreStatus() {
+      const now = new Date();
+      let statusText = "";
+      let countdownTarget;
+      let isOpen = false;
+      
+      if (availableDays.includes(now.getDay())) {
+        const openToday = setTimeForDate(now, openHour, openMinute);
+        const closeToday = setTimeForDate(now, closeHour, closeMinute);
+        if (now < openToday) {
+          countdownTarget = openToday;
+          statusText = "Store opens in: ";
+        } else if (now >= openToday && now < closeToday) {
+          countdownTarget = closeToday;
+          statusText = "Store is OPEN. Closes in: ";
+          isOpen = true;
+        } else {
+          countdownTarget = getNextOpenDate(now);
+          statusText = "Store opens in: ";
+        }
+      } else {
+        countdownTarget = getNextOpenDate(now);
+        statusText = "Store opens in: ";
+      }
+      
+      const diff = countdownTarget - now;
+      const totalSeconds = Math.floor(diff / 1000);
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+      
+      const formattedTime = String(hours).padStart(2, '0') + ":" +
+                            String(minutes).padStart(2, '0') + ":" +
+                            String(seconds).padStart(2, '0');
+      
+      storeStatusElem.textContent = statusText + formattedTime;
+      
+      if (isOpen) {
+        document.body.classList.add('store-open');
+      } else {
+        document.body.classList.remove('store-open');
+      }
+    }
+    
+    updateStoreStatus();
+    setInterval(updateStoreStatus, 1000);
   </script>
 </body>
 </html>
